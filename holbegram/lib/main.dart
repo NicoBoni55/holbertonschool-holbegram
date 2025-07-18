@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:holbegram/screens/signup_screen.dart';
 import './screens/login_screen.dart';
 
 Future main() async {
@@ -15,7 +16,9 @@ class Myapp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
+    final TextEditingController usernameController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
+    final TextEditingController passwordConfirmController = TextEditingController();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -23,9 +26,11 @@ class Myapp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(
+      home: SignUp(
         emailController: emailController, 
-        passwordController: passwordController),
+        usernameController: usernameController, 
+        passwordController: passwordController, 
+        passwordConfirmController: passwordConfirmController)
     );
   }
 }
