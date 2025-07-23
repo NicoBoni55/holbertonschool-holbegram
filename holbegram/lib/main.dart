@@ -15,22 +15,13 @@ class Myapp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController usernameController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController passwordConfirmController = TextEditingController();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Holbegram',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SignUp(
-        emailController: emailController, 
-        usernameController: usernameController, 
-        passwordController: passwordController, 
-        passwordConfirmController: passwordConfirmController)
+      home: SignUp()
     );
   }
 }

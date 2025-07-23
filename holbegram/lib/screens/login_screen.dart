@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'signup_screen.dart';
 import '../widgets/text_field.dart';
+import '../screens/upload_image_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final TextEditingController emailController;
@@ -74,6 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         _passwordVisible
                             ? Icons.visibility
                             : Icons.visibility_off,
+                            color: _passwordVisible
+                              ? Colors.grey.shade700
+                              : Color.fromARGB(218, 226, 37, 24)
                       ),
                     ),
                   ),
@@ -83,11 +88,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ButtonStyle(
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(4)
+                          )
+                        ),
                         backgroundColor: WidgetStateProperty.all(
                           Color.fromARGB(218, 226, 37, 24),
                         ),
                       ),
-                      onPressed: () => {},
+                      onPressed: () => {
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (context) => AddPicture()))
+                      },
                       child: Text(
                         'Log in',
                         style: TextStyle(color: Colors.white),
@@ -115,7 +130,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Text('Don\'t have an account'),
                         TextButton(
-                          onPressed: () => {},
+                          onPressed: () {
+                            Navigator.push(
+                              context, 
+                              MaterialPageRoute(
+                                builder: (context) => SignUp(), 
+                                )
+                              );
+                          },
                           child: Text(
                             'Sign up',
                             style: TextStyle(

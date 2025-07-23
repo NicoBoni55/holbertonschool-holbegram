@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
 import 'package:holbegram/widgets/text_field.dart';
 
-
 class SignUp extends StatefulWidget {
-  final TextEditingController emailController;
-  final TextEditingController usernameController;
-  final TextEditingController passwordController;
-  final TextEditingController passwordConfirmController;
-  final bool _passwordVisible;
+  final TextEditingController? emailController;
+  final TextEditingController? passwordController;
+
   const SignUp({
     super.key,
-    required this.emailController,
-    required this.usernameController,
-    required this.passwordController,
-    required this.passwordConfirmController,
-    bool passwordVisible = true,
-    }) : _passwordVisible = passwordVisible;
+    this.emailController,
+    this.passwordController,
+  });
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -23,20 +18,29 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   late bool _passwordVisible;
+  late TextEditingController _emailController;
+  late TextEditingController _usernameController;
+  late TextEditingController _passwordController;
+  late TextEditingController _passwordConfirmController;
 
   @override
   void initState() {
     super.initState();
-    _passwordVisible = widget._passwordVisible;
+    _passwordVisible = true;
+
+    _emailController = widget.emailController ?? TextEditingController();
+    _passwordController = widget.passwordController ?? TextEditingController();
+    _usernameController = TextEditingController();
+    _passwordConfirmController = TextEditingController();
   }
 
   @override
   void dispose() {
+    if (widget.emailController == null) _emailController.dispose();
+    if (widget.passwordController == null) _passwordController.dispose();
+    _usernameController.dispose();
+    _passwordConfirmController.dispose();
     super.dispose();
-    widget.emailController.dispose();
-    widget.usernameController.dispose();
-    widget.passwordController.dispose();
-    widget.passwordConfirmController.dispose();
   }
 
   @override
@@ -53,29 +57,36 @@ class _SignUpState extends State<SignUp> {
               style: TextStyle(fontFamily: "Billabong", fontSize: 50),
             ),
             Image.asset('assets/images/logo.webp', width: 80, height: 60),
+            Center(
+              child: Text(
+                'Sign up to see photos and videos\nfrom your friends',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey.shade700, fontSize: 17)
+              )
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   SizedBox(height: 28),
                   TextFieldInput(
-                    controller: widget.emailController, 
-                    ispasword: false, 
-                    hintText: 'Email', 
+                    controller: _emailController,
+                    ispasword: false,
+                    hintText: 'Email',
                     keyboardType: TextInputType.emailAddress,
-                    ),
+                  ),
                   SizedBox(height: 24),
                   TextFieldInput(
-                    controller: widget.usernameController, 
-                    ispasword: false, 
-                    hintText: 'Username', 
+                    controller: _usernameController,
+                    ispasword: false,
+                    hintText: 'Username',
                     keyboardType: TextInputType.name,
-                    ),
+                  ),
                   SizedBox(height: 24),
                   TextFieldInput(
-                    controller: widget.passwordController, 
-                    ispasword: !_passwordVisible, 
-                    hintText: 'Password', 
+                    controller: _passwordController,
+                    ispasword: !_passwordVisible,
+                    hintText: 'Password',
                     keyboardType: TextInputType.visiblePassword,
                     suffixIcon: IconButton(
                       alignment: Alignment.bottomLeft,
@@ -83,18 +94,22 @@ class _SignUpState extends State<SignUp> {
                         setState(() {
                           _passwordVisible = !_passwordVisible;
                         }),
-                      }, 
+                      },
                       icon: Icon(
                         _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off
-                      )),
+                            ? Icons.visibility
+                            : Icons.visibility_off, 
+                            color: _passwordVisible
+                              ? Colors.grey.shade700
+                              : Color.fromARGB(218, 226, 37, 24)
+                      ),
                     ),
+                  ),
                   SizedBox(height: 24),
                   TextFieldInput(
-                    controller: widget.passwordConfirmController, 
-                    ispasword: !_passwordVisible, 
-                    hintText: 'Confirm Password', 
+                    controller: _passwordConfirmController,
+                    ispasword: !_passwordVisible,
+                    hintText: 'Confirm Password',
                     keyboardType: TextInputType.visiblePassword,
                     suffixIcon: IconButton(
                       alignment: Alignment.bottomLeft,
@@ -102,13 +117,17 @@ class _SignUpState extends State<SignUp> {
                         setState(() {
                           _passwordVisible = !_passwordVisible;
                         }),
-                      }, 
+                      },
                       icon: Icon(
                         _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off
-                      )),
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                            color: _passwordVisible
+                              ? Colors.grey.shade700
+                              : Color.fromARGB(218, 226, 37, 24)
+                      ),
                     ),
+                  ),
                   SizedBox(height: 28),
                   SizedBox(
                     height: 48,
@@ -118,21 +137,59 @@ class _SignUpState extends State<SignUp> {
                         backgroundColor: WidgetStateProperty.all(
                           Color.fromARGB(218, 226, 37, 24),
                         ),
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
                       ),
-                      onPressed: () => {}, 
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(
+                              emailController: _emailController,
+                              passwordController: _passwordController,
+                            ),
+                          ),
+                        ),
+                      },
                       child: Text(
                         'Sign up',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  Flexible(
-                    child: Divider(
-                      thickness: 2,
-                    ))
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    child: Divider(thickness: 2, color: Colors.grey),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Have an account?'),
+                      TextButton(
+                        onPressed: () => {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(
+                                emailController: _emailController, 
+                                passwordController: _passwordController)))
+                        },
+                        child: Text(
+                          'Log in',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(218, 226, 37, 24),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
-              )
-            )
+              ),
+            ),
           ],
         ),
       ),
