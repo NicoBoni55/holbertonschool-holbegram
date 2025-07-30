@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:holbegram/screens/upload_image_screen.dart';
 import 'login_screen.dart';
 import 'package:holbegram/widgets/text_field.dart';
 
@@ -147,9 +148,10 @@ class _SignUpState extends State<SignUp> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginScreen(
-                              emailController: _emailController,
-                              passwordController: _passwordController,
+                            builder: (context) => AddPicture(
+                              email: _emailController.text,
+                              username: _usernameController.text,
+                              password: _passwordController.text,
                             ),
                           ),
                         ),

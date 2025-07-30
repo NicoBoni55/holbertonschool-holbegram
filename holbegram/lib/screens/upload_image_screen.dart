@@ -1,13 +1,19 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:holbegram/methods/auth_methods.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddPicture extends StatefulWidget {
-  String? email;
-  String? password;
-  String? username;
+  final String? email;
+  final String? password;
+  final String? username;
 
-  AddPicture({super.key});
+  AddPicture({
+    super.key,
+    required this.email,
+    required this.username,
+    required this.password,
+    });
 
   @override
   State<AddPicture> createState() => _AddPictureState();
@@ -40,7 +46,7 @@ class _AddPictureState extends State<AddPicture> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add Picture')),
+      appBar: AppBar(),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -54,23 +60,37 @@ class _AddPictureState extends State<AddPicture> {
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Hello, Jhon Doe Welcome to Holbegram.",
+                    "Hello, ${widget.username} to Holbegram.",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "Choose an image from your gallery or tak a new one.",
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 13, fontWeight: FontWeight.w700
                     ),
                   ),
+                  SizedBox(height: 28,)
                 ],
               ),
             ),
             _image != null
-                ? Image.memory(_image!, height: 200)
-                : Icon(Icons.person_outline, size: 200),
+                ? ClipOval(
+                  child: Image.memory(
+                    _image!,
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.cover,
+                  ),
+                )
+                : Image.asset(
+                  'assets/images/default_user.png',
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.cover,
+                ),
             SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -96,7 +116,29 @@ class _AddPictureState extends State<AddPicture> {
             SizedBox(height: 17),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String result = await AuthMethods().signUpUser(
+                    email: widget.email!, 
+                    password: widget.password!, 
+                    username: widget.username!,
+                    file: _image,
+                  );
+
+                  if (result == 'success') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Success", style: TextStyle(color: Colors.white),),
+                        backgroundColor: Colors.green,
+                        )
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(result, style: TextStyle(color: Colors.white),),
+                        backgroundColor: Colors.red,)
+                    );
+                  }
+                },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
                     Color.fromARGB(218, 250, 78, 65),
