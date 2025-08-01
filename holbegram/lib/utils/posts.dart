@@ -3,15 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../models/posts.dart';
+import '../screens/Pages/methods/post_storage.dart';
 
-class Posts extends StatefulWidget {
-  const Posts({super.key});
+class PostsList extends StatefulWidget {
+  const PostsList({super.key});
 
   @override
-  State<Posts> createState() => _PostsState();
+  State<PostsList> createState() => _PostsListState();
 }
 
-class _PostsState extends State<Posts> {
+class _PostsListState extends State<PostsList> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -61,10 +62,22 @@ class _PostsState extends State<Posts> {
                             Spacer(),
                             IconButton(
                               icon: Icon(Icons.more_horiz),
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Post Deleted")),
-                                );
+                              onPressed: () async {
+                                try {
+                                  final post = Posts.fromSnap(postData);
+
+                                  await PostStorage().deletePost(
+                                    post.postId, 
+                                    ''
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Post Deleted")),
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Error: $e")),
+                                  );
+                                }
                               },
                             ),
                           ],
