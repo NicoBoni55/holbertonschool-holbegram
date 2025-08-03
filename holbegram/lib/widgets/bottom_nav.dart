@@ -48,11 +48,11 @@ class _BottomNavState extends State<BottomNav> {
         controller: _pageController,
         onPageChanged: onPageChanged,
         children: [
-          Feed(),
-          //Search(),
-          //AddImage(),
-          //Favorite(),
-          //Profile(),
+          Feed(),                                                          
+          Scaffold(body: Center(child: Text('Search - Coming Soon'))),     
+          AddImage(),                                                      
+          Scaffold(body: Center(child: Text('Favorite - Coming Soon'))),   
+          Scaffold(body: Center(child: Text('Profile - Coming Soon'))), 
         ],
       ),
       bottomNavigationBar: BottomNavyBar(

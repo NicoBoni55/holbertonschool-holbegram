@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/home.dart';
 import 'signup_screen.dart';
 import '../widgets/text_field.dart';
 import '../screens/upload_image_screen.dart';
@@ -98,7 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       onPressed: () => {
-                        
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Home())
+                        )
                       },
                       child: Text(
                         'Log in',
