@@ -24,38 +24,65 @@ class _AddImageState extends State<AddImage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Add New '),
+        title: Text(
+          'Add Image', 
+          style: TextStyle(
+            fontWeight: FontWeight.bold
+          ),
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+      actions: [
+        Padding(
+          padding: EdgeInsets.only(right: 16),
+          child: Center(
+            child: Text(
+              'Post',
+              style: TextStyle(
+                fontSize: 30,
+                fontFamily: 'Billabong',
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        )
+      ],
       ),
       body: Column(
         children: [
+          Center(
+            child: Column(
+              children: [
+                Text(
+                  'Add Image',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Text(
+                  'Choose an image from your gallery or take a one.',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
           Padding(
             padding: EdgeInsets.all(16),
             child: TextField(
               controller: _captionController,
               decoration: InputDecoration(
                 hintText: 'Write a caption...',
+                border: InputBorder.none,
               ),
-              maxLines: 4,
             ),
           ),
+          SizedBox(height: 8),
           Container(
             height: 200,
             width: double.infinity,
-            color: Colors.grey.shade300,
-            child: _file != null 
-              ? Image.memory(_file!, fit: BoxFit.cover)
-              : Image.asset('assets/images/add.webp', width: 50, height: 50,)
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () {
-                print('Seleccionar imagen');
-              }, 
-              child: Text('Select Image'),
-              ),
+            child: _file != null
+                ? Image.memory(_file!, fit: BoxFit.cover)
+                : Image.asset('assets/images/add.webp', width: 50, height: 50),
           ),
         ],
       ),
