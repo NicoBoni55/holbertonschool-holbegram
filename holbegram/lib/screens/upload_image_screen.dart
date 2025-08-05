@@ -2,6 +2,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:holbegram/methods/auth_methods.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:holbegram/providers/user_provider.dart';
+import 'package:holbegram/screens/home.dart';
 
 class AddPicture extends StatefulWidget {
   final String? email;
@@ -22,6 +25,7 @@ class AddPicture extends StatefulWidget {
 class _AddPictureState extends State<AddPicture> {
   Uint8List? _image;
   final ImagePicker _picker = ImagePicker();
+  bool _isLoading = false;
 
   void selectImageFromGallery() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -125,11 +129,18 @@ class _AddPictureState extends State<AddPicture> {
                   );
 
                   if (result == 'success') {
+                    await Provider.of<UserProvider>(context).refreshUser();
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text("Success", style: TextStyle(color: Colors.white),),
+                        content: Text("Account created successfully!"),
                         backgroundColor: Colors.green,
                         )
+                    );
+
+                    Navigator.pushReplacement(
+                      context, 
+                      MaterialPageRoute(builder: (context) => Home())
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

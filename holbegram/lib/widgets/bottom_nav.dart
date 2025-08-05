@@ -52,7 +52,7 @@ class _BottomNavState extends State<BottomNav> {
           Scaffold(body: Center(child: Text('Search - Coming Soon'))),     
           AddImage(),                                                      
           Scaffold(body: Center(child: Text('Favorite - Coming Soon'))),   
-          Scaffold(body: Center(child: Text('Profile - Coming Soon'))), 
+          ProfileScreen(), 
         ],
       ),
       bottomNavigationBar: BottomNavyBar(

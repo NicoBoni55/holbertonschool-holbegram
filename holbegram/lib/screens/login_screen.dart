@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../screens/home.dart';
+import '../methods/auth_methods.dart';
+import '../providers/user_provider.dart';
 import 'signup_screen.dart';
 import '../widgets/text_field.dart';
-import '../screens/upload_image_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final TextEditingController emailController;
@@ -98,12 +100,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           Color.fromARGB(218, 226, 37, 24),
                         ),
                       ),
-                      onPressed: () => {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Home())
-                        )
+                      onPressed: () async {
+                        String result = await AuthMethods().login(
+                          email: widget.emailController.text, 
+                          password: widget.passwordController.text
+                        );
+                        if (result == 'success') {
+                          await Provider.of<UserProvider>(context, listen: false).refreshUser();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Login successful!'),
+                            backgroundColor: Colors.green,
+                            )
+                          );
+                          Navigator.pushReplacement(
+                            context, 
+                            MaterialPageRoute(builder: (context) => Home())
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(result),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
                       child: Text(
                         'Log in',
